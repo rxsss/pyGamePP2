@@ -18,7 +18,7 @@ def get_image(path):
 
 #main Settings
 WIDTH = 600
-HEIGHT = 600
+HEIGHT = 650
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Snake game")
 scoreFont = pygame.font.SysFont('Arial', 30)
@@ -55,6 +55,7 @@ class Snake:
         self.elements = [[100, 100], [120, 100], [140, 100]]
         self.score = 0
         self.add = False
+        self.color = (255,40,40)
 
     def addSnake(self):
         self.size += 1
@@ -64,7 +65,7 @@ class Snake:
 
     def draw(self):
         for element in self.elements:
-            pygame.draw.circle(screen, (255,0,0), element, self.radius)
+            pygame.draw.circle(screen, self.color, element, self.radius)
 
 
     def move(self):
@@ -121,8 +122,8 @@ def showWalls():
         screen.blit(wallImage, (0, i))
         screen.blit(wallImage, (600 - wallSize, i))
 
-def showScore(x,y,score):
-    show = scoreFont.render('Score: ' + str(score), True, (0,0,0))
+def showScore(x,y,score, color):
+    show = scoreFont.render('Score: ' + str(score), True, color)
     screen.blit(show, (x,y))
 
 
@@ -155,6 +156,7 @@ def mainMenu():
 snake = Snake()
 snake2 = Snake()
 snake2.elements = [[100, 300], [120, 300], [140, 300]]
+snake2.color = (40,255,40)
 twoSnake = True
 food = Food()
 turn = True
@@ -256,7 +258,7 @@ while turn:
         snake.draw()
         food.draw()
         collision()
-        showScore(40,40,snake.score)
+        showScore(20,610,snake.score, (255,40,40))
         if snake.elements[0][0] < 0 or snake.elements[0][0] > 600:
             snake.elements[0][0] = snake.elements[0][0] % 600
         if snake.elements[0][1] < 0 or snake.elements[0][1] > 600:
@@ -275,7 +277,7 @@ while turn:
         if twoSnake:
             snake2.move()
             snake2.draw()
-            showScore(40,60,snake2.score)
+            showScore(430,610,snake2.score, (40, 255,40))
             for i in range(1,snake2.size):
                 if snake2.elements[0] == snake2.elements[i]:
                     time.sleep(1.5)
@@ -300,7 +302,7 @@ while turn:
         snake.draw()
         food.draw()
         collision()
-        showScore(15,15,snake.score)
+        showScore(20,610,snake.score, (255,40,40))
         showWalls()
         collisWall()
         for i in range(1,snake.size):
@@ -317,7 +319,7 @@ while turn:
         if twoSnake:
             snake2.move()
             snake2.draw()
-            showScore(40,60,snake2.score)
+            showScore(430,610,snake2.score, (40,255,40))
             for i in range(1,snake2.size):
                 if snake2.elements[0] == snake2.elements[i]:
                     time.sleep(1.5)
@@ -337,7 +339,7 @@ while turn:
         snake.draw()
         food.draw()
         collision()
-        showScore(15,15,snake.score)
+        showScore(20,610,snake.score, (255,40,40))
         showWalls()
         collisWall()
         for i in range(1,snake.size):
@@ -354,7 +356,7 @@ while turn:
         if twoSnake:
             snake2.move()
             snake2.draw()
-            showScore(40,60,snake2.score)
+            showScore(430,610,snake2.score, (40, 255,40))
             for i in range(1,snake2.size):
                 if snake2.elements[0] == snake2.elements[i]:
                     time.sleep(1.5)
