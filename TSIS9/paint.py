@@ -25,13 +25,28 @@ color = (255,0,0)
 rectDrawings = list()
 circleDrawings = list()
 lineDrawings = list()
-
+firstly = True
+# print(circleDrawings)
+# if firstly:
+#     ci = open('circleDrawings.txt', 'r')
+#     circleDrawings = ci.read()
+#     firstly = False
+# print(circleDrawings)
 previous, pos = None, None
 turn = True
 while turn:
     screen.fill((255,255,255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            r = open("rectDrawings.txt", "w")
+            c = open("circleDrawings.txt", "w")
+            l = open("lineDrawings.txt", "w")
+            r.write(str(rectDrawings))
+            c.write(str(circleDrawings))
+            l.write(str(lineDrawings))
+            r.close()
+            c.close()
+            l.close()
             turn = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             previous = pygame.mouse.get_pos()
@@ -56,7 +71,9 @@ while turn:
                 rectangle = False
                 circle = False
             if previous[0] in range(670, 760) and previous[1] in range(5, 45):
-                pass
+                pygame.image.save(screen, "screenshot.png")
+                
+            
         if event.type == pygame.MOUSEMOTION:
             mov = pygame.mouse.get_pos()
             if previous:
