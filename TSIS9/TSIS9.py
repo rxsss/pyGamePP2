@@ -16,9 +16,6 @@ def get_image(path):
         images[path] = image
     return image
 
-
-
-
 #main Settings
 WIDTH = 600
 HEIGHT = 600
@@ -44,9 +41,6 @@ mainMenuFont = pygame.font.SysFont('Arial', 25)
 scoreFont = pygame.font.SysFont('Arial', 30)
 gameOverFont = pygame.font.SysFont('Myraid Pro', 60)
 gameOver = gameOverFont.render("Game Over", True, (0,0,0))
-
-
-
 
 #Clock
 clock = pygame.time.Clock()
@@ -99,6 +93,14 @@ def collision():
         snake.add = True
         snake.score += 1
         snake.add = True
+    if twoSnake:
+        if ((food.x in range(snake2.elements[0][0] - 10, snake2.elements[0][0] + 10)) and (food.y in range(snake2.elements[0][1] - 10, snake2.elements[0][1] + 10))) or (snake2.elements[0][0] in range(food.x, food.x + 30) and snake2.elements[0][1] in range(food.y, food.y + 30)):
+            food.x = random.randint(50, WIDTH - 50)
+            food.y = random.randint(50, WIDTH - 50)
+            snake2.score += 1
+            snake2.add = True
+            snake2.score += 1
+            snake2.add = True
 def gameOverScreen():
     screen.fill((255,0,0))
     screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
@@ -108,6 +110,9 @@ def gameOverScreen():
 def collisWall():
     if (snake.elements[0][0] > 600 - wallSize or snake.elements[0][0] < wallSize) or (snake.elements[0][1] > 600 - wallSize or snake.elements[0][1] < wallSize):
         gameOverScreen()
+    if twoSnake:
+        if (snake2.elements[0][0] > 600 - wallSize or snake2.elements[0][0] < wallSize) or (snake2.elements[0][1] > 600 - wallSize or snake2.elements[0][1] < wallSize):
+            gameOverScreen()
 
 def showWalls():
     for i in range(0,600,wallSize):
@@ -148,14 +153,15 @@ def mainMenu():
 
 
 snake = Snake()
+snake2 = Snake()
+snake2.elements = [[100, 300], [120, 300], [140, 300]]
+twoSnake = True
 food = Food()
 turn = True
 
 while turn:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            if continueGame:
-                
             turn = False
         if event.type == pygame.KEYDOWN:
             if snake.dx != -10:
@@ -174,22 +180,40 @@ while turn:
                 if event.key == pygame.K_UP:
                     snake.dx = 0
                     snake.dy = -10
-            if event.key == pygame.K_ESCAPE:
-                if firstLevel:
-                    firstLevel = False
-                    mainMenuBool = True
-                    continueGame = True
-                    continueFirst = True
-                if secondLevel:
-                    secondLevel = False
-                    mainMenuBool = True
-                    continueGame = True
-                    continueSecond = True
-                if thirdLevel:
-                    thirdLevel = False
-                    mainMenuBool = True
-                    continueGame = True
-                    continueThird = True
+            if twoSnake:
+                if snake2.dx != -10:
+                    if event.key == pygame.K_d:
+                        snake2.dx = 10
+                        snake2.dy = 0
+                if snake2.dx != 10:
+                    if event.key == pygame.K_a:
+                        snake2.dx = -10
+                        snake2.dy = 0
+                if snake2.dy != -10:
+                    if event.key == pygame.K_s:
+                        snake2.dx = 0
+                        snake2.dy = 10
+                if snake2.dy != 10:
+                    if event.key == pygame.K_w:
+                        snake2.dx = 0
+                        snake2.dy = -10
+            if not mainMenuBool:    
+                if event.key == pygame.K_ESCAPE:
+                    if firstLevel:
+                        firstLevel = False
+                        mainMenuBool = True
+                        continueGame = True
+                        continueFirst = True
+                    if secondLevel:
+                        secondLevel = False
+                        mainMenuBool = True
+                        continueGame = True
+                        continueSecond = True
+                    if thirdLevel:
+                        thirdLevel = False
+                        mainMenuBool = True
+                        continueGame = True
+                        continueThird = True
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
             if continueGame:
@@ -212,20 +236,16 @@ while turn:
                 time.sleep(0.5)
                 mainMenuBool = False
                 firstLevel = True
-                print(pos)
             if (pos[0] in range(200,400)) and (pos[1] in range(250,285)):
                 time.sleep(0.5)
                 mainMenuBool = False
                 secondLevel = True
-                print(pos)
             if (pos[0] in range(200,400)) and (pos[1] in range(300,335)):
                 time.sleep(0.5)
                 mainMenuBool = False
                 thirdLevel = True
-                print(pos)
             if (pos[0] in range(200,400)) and (pos[1] in range(350,385)):
                 pygame.quit()
-                print(pos)
 
     if mainMenuBool:
         mainMenu()
@@ -236,7 +256,7 @@ while turn:
         snake.draw()
         food.draw()
         collision()
-        showScore(15,15,snake.score)
+        showScore(40,40,snake.score)
         if snake.elements[0][0] < 0 or snake.elements[0][0] > 600:
             snake.elements[0][0] = snake.elements[0][0] % 600
         if snake.elements[0][1] < 0 or snake.elements[0][1] > 600:
@@ -252,7 +272,25 @@ while turn:
                 firstLevel = False
                 mainMenuBool = True
                 continueGame = False
-
+        if twoSnake:
+            snake2.move()
+            snake2.draw()
+            showScore(40,60,snake2.score)
+            for i in range(1,snake2.size):
+                if snake2.elements[0] == snake2.elements[i]:
+                    time.sleep(1.5)
+                    screen.fill((255,0,0))
+                    screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
+                    pygame.display.flip()
+                    time.sleep(5)
+                    snake2.score = 0
+                    firstLevel = False
+                    mainMenuBool = True
+                    continueGame = False
+            if snake2.elements[0][0] < 0 or snake2.elements[0][0] > 600:
+                snake2.elements[0][0] = snake2.elements[0][0] % 600
+            if snake2.elements[0][1] < 0 or snake2.elements[0][1] > 600:
+                snake2.elements[0][1] = snake2.elements[0][1] % 600
         pygame.display.update()
         clock.tick(15)
 
@@ -276,6 +314,21 @@ while turn:
                 secondLevel = False
                 mainMenuBool = True
                 continueGame = False
+        if twoSnake:
+            snake2.move()
+            snake2.draw()
+            showScore(40,60,snake2.score)
+            for i in range(1,snake2.size):
+                if snake2.elements[0] == snake2.elements[i]:
+                    time.sleep(1.5)
+                    screen.fill((255,0,0))
+                    screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
+                    pygame.display.flip()
+                    time.sleep(5)
+                    snake2.score = 0
+                    firstLevel = False
+                    mainMenuBool = True
+                    continueGame = False
         pygame.display.update()
         clock.tick(25)
     if thirdLevel:
@@ -298,5 +351,20 @@ while turn:
                 thirdLevel = False
                 mainMenuBool = True
                 continueGame = False
+        if twoSnake:
+            snake2.move()
+            snake2.draw()
+            showScore(40,60,snake2.score)
+            for i in range(1,snake2.size):
+                if snake2.elements[0] == snake2.elements[i]:
+                    time.sleep(1.5)
+                    screen.fill((255,0,0))
+                    screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
+                    pygame.display.flip()
+                    time.sleep(5)
+                    snake2.score = 0
+                    firstLevel = False
+                    mainMenuBool = True
+                    continueGame = False
         pygame.display.update()
         clock.tick(50)
