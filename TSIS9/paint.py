@@ -24,6 +24,7 @@ color = (255,0,0)
 #List of drawings
 rectDrawings = list()
 circleDrawings = list()
+lineDrawings = list()
 
 previous, pos = None, None
 turn = True
@@ -60,7 +61,7 @@ while turn:
             mov = pygame.mouse.get_pos()
             if previous:
                 if eraser:
-                    pygame.draw.line(screen, (255,255,255), previous, mov, 20)
+                    lineDrawings.append([previous, mov])
                     previous = mov
         if event.type == pygame.MOUSEBUTTONUP:
             last = pygame.mouse.get_pos()
@@ -89,6 +90,8 @@ while turn:
         pygame.draw.rect(screen, i[0], pygame.Rect(i[1],(i[2][0] - i[1][0], i[2][1] - i[1][1])))
     for i in circleDrawings:
         pygame.draw.circle(screen, i[0], ((i[2][0] + i[1][0])/2,(i[2][1] + i[1][1])/2 ), i[2][0] - (i[2][0] + i[1][0])/2)
+    for i in lineDrawings:
+        pygame.draw.line(screen, (255,255,255), i[0], i[1], 20)
     pygame.display.update()
 
 
