@@ -1,4 +1,5 @@
 import pygame
+import json
 pygame.init()
 
 HEIGTH = 700
@@ -26,27 +27,27 @@ rectDrawings = list()
 circleDrawings = list()
 lineDrawings = list()
 firstly = True
-# print(circleDrawings)
-# if firstly:
-#     ci = open('circleDrawings.txt', 'r')
-#     circleDrawings = ci.read()
-#     firstly = False
-# print(circleDrawings)
+if firstly:
+    openSaveTxt = open("save.txt")
+    book = json.loads(openSaveTxt.read())
+    print(type(book))
+    rectDrawings = book["rect"]
+    circleDrawings = book["circle"]
+    lineDrawings = book["line"]
+    openSaveTxt.close()
+    firstly = False
 previous, pos = None, None
 turn = True
 while turn:
     screen.fill((255,255,255))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            r = open("rectDrawings.txt", "w")
-            c = open("circleDrawings.txt", "w")
-            l = open("lineDrawings.txt", "w")
-            r.write(str(rectDrawings))
-            c.write(str(circleDrawings))
-            l.write(str(lineDrawings))
-            r.close()
-            c.close()
-            l.close()
+            saveDict = {"rect": rectDrawings,
+                        "circle": circleDrawings,
+                        "line": lineDrawings}
+            newFile = open("save.txt", "w")
+            newFile.write(json.dumps(saveDict))
+            newFile.close()
             turn = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             previous = pygame.mouse.get_pos()
@@ -70,8 +71,6 @@ while turn:
                 eraser = True
                 rectangle = False
                 circle = False
-            if previous[0] in range(670, 760) and previous[1] in range(5, 45):
-                pygame.image.save(screen, "screenshot.png")
                 
             
         if event.type == pygame.MOUSEMOTION:
@@ -98,9 +97,6 @@ while turn:
     screen.blit(eraseImage, (580, 10))
     showText = font.render("Shape: ", True, (0,0,0))
     screen.blit(showText, (390,7))
-    pygame.draw.rect(screen, (90,90,90), pygame.Rect(670,5,90,40))
-    showSave = font.render("Save", True, (30,30,255))
-    screen.blit(showSave, (680,8))
     rectDrawings.reverse()
     circleDrawings.reverse()
     for i in rectDrawings:
