@@ -24,6 +24,10 @@ continueFirst = False
 continueSecond = False
 continueThird = False
 twoSnake = True
+oSave = open("saveSnake.txt")
+lSave = json.loads(oSave.read())
+continueGame = lSave["continue"]
+oSave.close()
 
 #Text
 mainMenuFont = pygame.font.SysFont('Arial', 25)
@@ -88,25 +92,27 @@ def collision():
             snake2.score += 1
             snake2.add = True
 
-def gameOverScreen():
-    time.sleep(1)
-    screen.fill((255,0,0))
-    screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
-    pygame.display.flip()
-    time.sleep(5)
+def newSnakes():
     snake.score = 0
     snake.size = 3
     snake.elements = [[100, 100], [120, 100], [140, 100]]
     snake.dx = 10
-    snake.dx = 0
+    snake.dy = 0
     snake2.score = 0
     snake2.size = 3
     snake2.elements = [[100, 300], [120, 300], [140, 300]]
     snake2.dx = 10
-    snake2.dx = 0
+    snake2.dy = 0
+
+def gameOverScreen():
+    newSnakes()
+    time.sleep(1)
+    screen.fill((255,0,0))
+    screen.blit(gameOver,((600 - gameOver.get_width())/2, (600 - gameOver.get_height())/2))
+    pygame.display.flip()
+    time.sleep(1)
     mainMenuBool = True
     continueGame = False
-    
 
 def collisWall():
     if (snake.elements[0][0] > 600 - wallSize or snake.elements[0][0] < wallSize) or (snake.elements[0][1] > 600 - wallSize or snake.elements[0][1] < wallSize):
@@ -157,8 +163,9 @@ def firstLevelMain():
         snake.elements[0][1] = snake.elements[0][1] % 600
     for i in range(1, snake.size):
         if snake.elements[0] == snake.elements[i]:
-            gameOverScreen()
             firstLevel = False
+            gameOverScreen()
+
     if twoSnake:
         for i in range(1, snake2.size):
             if snake2.elements[0] == snake2.elements[i]:
@@ -202,26 +209,23 @@ snake2.color = (40,255,40)
 twoSnake = True
 food = Food()
 turn = True
-
 firstlyOpened = True
-if firstlyOpened:
+if continueGame:
     openSave = open("saveSnake.txt")
     loadSave = json.loads(openSave.read())
-    if loadSave["continue"]:
-        snake.size = loadSave["firstSize"]
-        snake.score = loadSave["firstScore"]
-        snake.elements = loadSave["firstElements"]
-        snake.dx = loadSave["firstDx"]
-        snake.dy = loadSave["firstDy"]
-        snake2.size = loadSave["secondSize"]
-        snake2.score = loadSave["secondScore"]
-        snake2.elements = loadSave["secondElements"]
-        snake2.dx = loadSave["secondDx"]
-        snake2.dy = loadSave["secondDy"]
-        continueGame = loadSave["continue"]
-        continueFirst = loadSave["continueF"]
-        continueSecond = loadSave["continueS"]
-        continueThird = loadSave["continueT"]
+    snake.size = loadSave["firstSize"]
+    snake.score = loadSave["firstScore"]
+    snake.elements = loadSave["firstElements"]
+    snake.dx = loadSave["firstDx"]
+    snake.dy = loadSave["firstDy"]
+    snake2.size = loadSave["secondSize"]
+    snake2.score = loadSave["secondScore"]
+    snake2.elements = loadSave["secondElements"]
+    snake2.dx = loadSave["secondDx"]
+    snake2.dy = loadSave["secondDy"]
+    continueFirst = loadSave["continueF"]
+    continueSecond = loadSave["continueS"]
+    continueThird = loadSave["continueT"]
     openSave.close()
     firstlyOpened = False
 
@@ -293,12 +297,15 @@ while turn:
             if (pos[0] in range(200,400)) and (pos[1] in range(200,235)):
                 mainMenuBool = False
                 firstLevel = True
+                newSnakes()
             if (pos[0] in range(200,400)) and (pos[1] in range(250,285)):
                 mainMenuBool = False
                 secondLevel = True
+                newSnakes()
             if (pos[0] in range(200,400)) and (pos[1] in range(300,335)):
                 mainMenuBool = False
                 thirdLevel = True
+                newSnakes()
             if (pos[0] in range(200,400)) and (pos[1] in range(350,385)):
                 if continueGame:
                     saveDict = {"firstSize": snake.size,
