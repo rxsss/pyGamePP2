@@ -201,7 +201,7 @@ def thirdLevelMain():
             if snake2.elements[0] == snake2.elements[i]:
                 gameOverScreen()
                 thirdLevel = False
-    FPS = 45
+    FPS = 60
 
 snake = Snake()
 snake2 = Snake()
@@ -338,6 +338,8 @@ while turn:
             thirdLevelMain()
         snake.move()
         snake.draw()
+        snake2.move()
+        snake2.draw()
         food.draw()
         collision()
         showScore(20,610,snake.score, (255,40,40))
