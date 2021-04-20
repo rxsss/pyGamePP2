@@ -1,0 +1,1 @@
+{"firstSize": 7, "firstElements": [[440, 200], [440, 190], [440, 180], [440, 170], [440, 160], [440, 150], [440, 140]], "firstScore": 8, "firstDx": 0, "firstDy": 10, "secondSize": 3, "secondElements": [[100, 100], [120, 100], [140, 100]], "secondScore": 0, "secondDx": 10, "secondDy": 0, "continue": true, "continueF": true, "continueS": false, "continueT": false}

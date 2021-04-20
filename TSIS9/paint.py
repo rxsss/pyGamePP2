@@ -26,7 +26,7 @@ color = (255,0,0)
 rectDrawings = list()
 circleDrawings = list()
 lineDrawings = list()
-firstly = False
+firstly = True
 if firstly:
     openSaveTxt = open("save.txt")
     book = json.loads(openSaveTxt.read())
