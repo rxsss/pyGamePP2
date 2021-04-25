@@ -21,6 +21,12 @@ while isOn:
             isOn = False
     
     screen.fill((255,255,255))
+    for i in range(0, 1041):
+        if i == 0 or i == 1038:
+            pygame.draw.line(screen,(0,0,0),(i, 0),(i, 720), 2)
+            pygame.draw.line(screen,(0,0,0),(0, 0),(1040, 0), 2)
+        elif i == 720:
+            pygame.draw.line(screen,(0,0,0),(0, 718),(1040, 718), 2)
     for i in range(0, 961, 20):
         if i == 480:
             pygame.draw.line(screen,(0,0,0),(i + 40,0),(i + 40,720), 2)
@@ -33,9 +39,7 @@ while isOn:
         elif i % 20 == 0:
             pygame.draw.line(screen,(0,0,0),(i + 40,0),(i + 40,5))
     for i in range(0, 641, 20):
-        if i == 320:
-            pygame.draw.line(screen,(0,0,0),(0,i + 40),(1300, i + 40), 2)
-        elif i % 80 == 0:
+        if i % 80 == 0:
             pygame.draw.line(screen,(0,0,0),(0,i + 40),(1300, i + 40))
         elif i % 40 == 0:
             pygame.draw.line(screen,(0,0,0),(0,i + 40),(15, i + 40))
